@@ -1,0 +1,10 @@
+apache
+solr
+search engine
+distributed search
+java
+performance testing
+wikipedia
+big data
+scalability
+cloud
