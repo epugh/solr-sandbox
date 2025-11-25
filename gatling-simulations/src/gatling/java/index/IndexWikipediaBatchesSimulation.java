@@ -1,10 +1,5 @@
 package index;
 
-import io.gatling.javaapi.core.*;
-import io.gatling.javaapi.http.*;
-import util.GatlingUtils;
-import util.SolrUtil;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.DirectoryStream;
@@ -16,8 +11,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
-import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.*;
+import io.gatling.javaapi.core.ChainBuilder;
+import static io.gatling.javaapi.core.CoreDsl.RawFileBody;
+import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
+import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.feed;
+import static io.gatling.javaapi.core.CoreDsl.scenario;
+import io.gatling.javaapi.core.ScenarioBuilder;
+import io.gatling.javaapi.core.Simulation;
+import static io.gatling.javaapi.http.HttpDsl.http;
+import io.gatling.javaapi.http.HttpProtocolBuilder;
+import io.gatling.javaapi.http.HttpRequestActionBuilder;
+import util.GatlingUtils;
+import util.SolrUtil;
 
 public class IndexWikipediaBatchesSimulation extends Simulation {
 
@@ -62,7 +68,7 @@ public class IndexWikipediaBatchesSimulation extends Simulation {
 
     @Override
     public void after() {
-        tearDownCollection();
+        //tearDownCollection();
     }
 
 
