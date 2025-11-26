@@ -27,17 +27,20 @@ import util.GatlingUtils;
 public class SearchTermsSimulation extends Simulation {
 
     private final String testWorkDir;
+    private final String collectionName;
     private final Path termsFile;
     private final int atOnceUsersCount;
     private final HttpProtocolBuilder httpProtocol;
     private final ChainBuilder searchChain;
     private final ScenarioBuilder scn;
+    private final String queryParams;
 
     public SearchTermsSimulation() {
         atOnceUsersCount = getConfigInt("CONCURRENT_USERS", 10);
-
+        collectionName = getConfig("COLLECTION_NAME", "wikipedia");
         testWorkDir = getConfig("TESTS_WORK_DIR", ".gatling");
         String termsFileName = getConfig("SEARCH_TERMS_FILE", "wikipedia-queries.txt");
+        queryParams = getConfig("QUERY_PARAMS","");
         termsFile = Paths.get(testWorkDir, termsFileName);
 
         httpProtocol = http.baseUrl(GatlingUtils.getEndpoint());
@@ -85,7 +88,8 @@ public class SearchTermsSimulation extends Simulation {
     }
 
     private ChainBuilder search(List<String> terms) {
-        String collectionName = getConfig("COLLECTION_NAME", "wikipedia");
+
+
         Iterator<Map<String, Object>> feeder = terms.stream()
                 .map(t -> Collections.singletonMap("term", (Object) t))
                 .iterator();
@@ -94,6 +98,21 @@ public class SearchTermsSimulation extends Simulation {
                 .get("/solr/" + collectionName + "/select")
                 .queryParam("q", "#{term}")
                 .queryParam("wt", "json");
+
+        // Add any extra query parameters provided as a single string: key1=val1&flag=true
+        if (!queryParams.isBlank()) {
+            for (String pair : queryParams.split("&")) {
+                if (pair.isBlank()) continue;
+                int idx = pair.indexOf('=');
+                if (idx < 0) {
+                    req = req.queryParam(pair.trim(), "");
+                } else {
+                    String key = pair.substring(0, idx).trim();
+                    String value = pair.substring(idx + 1).trim();
+                    req = req.queryParam(key, value);
+                }
+            }
+        }
 
         return feed(feeder).exec(req);
     }
