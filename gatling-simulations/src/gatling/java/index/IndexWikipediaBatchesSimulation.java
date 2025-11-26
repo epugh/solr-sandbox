@@ -31,6 +31,7 @@ public class IndexWikipediaBatchesSimulation extends Simulation {
     private final Path batchesDir;
     private final int numFiles;
     private final int atOnceUsersCount;
+    private final boolean tearDownCollection;
     private final HttpProtocolBuilder httpProtocol;
     private final ChainBuilder updates;
     private final ScenarioBuilder scn;
@@ -39,6 +40,7 @@ public class IndexWikipediaBatchesSimulation extends Simulation {
         atOnceUsersCount = getConfigInt("CONCURRENT_USERS", 10);
 
         testWorkDir = getConfig("TESTS_WORK_DIR", ".gatling");
+        tearDownCollection = getConfigBool("TEAR_DOWN_COLLECTION", true);
         batchesDir = Paths.get(testWorkDir, "batches");
         numFiles = batchesDir.toFile().list().length;
         httpProtocol =  http.baseUrl(GatlingUtils.getEndpoint());
@@ -61,6 +63,10 @@ public class IndexWikipediaBatchesSimulation extends Simulation {
         return Integer.parseInt(getConfig(key, String.valueOf(defaultValue)));
     }
 
+    public static boolean getConfigBool(String key, boolean defaultValue) {
+        return Boolean.parseBoolean(getConfig(key, String.valueOf(defaultValue)));
+    }
+
     @Override
     public void before() {
         setupCollection();
@@ -68,7 +74,9 @@ public class IndexWikipediaBatchesSimulation extends Simulation {
 
     @Override
     public void after() {
-        //tearDownCollection();
+        if (tearDownCollection) {
+            tearDownCollection();
+        }
     }
 
 

@@ -16,7 +16,7 @@ There is preprocessed data available at https://nightlies.apache.org/solr/benchm
 
 ## Supported Simulations
 
-Currently only a single simulation is supported, "IndexWikipediaBatchesSimulation", which provides a benchmark for indexing truncated wikipedia pages.
+Currently, only a single simulation is supported, "IndexWikipediaBatchesSimulation", which provides a benchmark for indexing truncated wikipedia pages.
 (This benchmark relies on having processed data available to index.
 See [the data-prep README](../gatling-data-prep/README.md) for details on creating the necessary data.)
 This benchmark can be can be configured using the environment-variable knobs below:
@@ -28,6 +28,7 @@ This benchmark can be can be configured using the environment-variable knobs bel
 - `COLLECTION_NAME` - the collection name to index data into, created by the simulation (defaults to: "wikipedia")
 - `NUM_SHARDS` - the number of shards for the created collection (defaults to: 1)
 - `NUM_REPLICAS` - the number of replicas for each shard of the created collection (defaults to: 1)
+- `TEAR_DOWN_COLLECTION` - if the collection should be deleted after running the simulation (defaults to: true)
 
 ## Running Built-In Scenarios
 
