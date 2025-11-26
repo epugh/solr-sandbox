@@ -37,7 +37,7 @@ public class SearchTermsSimulation extends Simulation {
         atOnceUsersCount = getConfigInt("CONCURRENT_USERS", 10);
 
         testWorkDir = getConfig("TESTS_WORK_DIR", ".gatling");
-        String termsFileName = getConfig("SEARCH_TERMS_FILE", "terms.txt");
+        String termsFileName = getConfig("SEARCH_TERMS_FILE", "wikipedia-queries.txt");
         termsFile = Paths.get(testWorkDir, termsFileName);
 
         httpProtocol = http.baseUrl(GatlingUtils.getEndpoint());
